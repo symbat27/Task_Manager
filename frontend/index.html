@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Projects</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <a href="index.html">Projects</a>
+  <a href="tasks.html">Tasks</a>
+  <a href="create-task.html">Create Task</a>
+  <a href="users.html">Users</a>
+</div>
+
+<h1>Projects</h1>
+
+<div class="container">
+  <ul id="projects"></ul>
+</div>
+
+<script>
+fetch("http://localhost:3000/projects")
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("projects");
+    data.forEach(p => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        ${p.title}
+        <a href="tasks.html?projectId=${p._id}">View tasks</a>
+      `;
+      list.appendChild(li);
+    });
+  });
+</script>
+
+</body>
+</html>
