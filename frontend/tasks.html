@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tasks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <a href="index.html">Projects</a>
+  <a href="tasks.html">Tasks</a>
+  <a href="create-task.html">Create Task</a>
+  <a href="users.html">Users</a>
+</div>
+
+<h1>Tasks</h1>
+
+<div class="container">
+  <ul id="tasks"></ul>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const projectId = params.get("projectId");
+
+if (!projectId) {
+  document.getElementById("tasks").innerHTML = "<li>Select project first</li>";
+} else {
+  fetch(`http://localhost:3000/tasks?projectId=${projectId}`)
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById("tasks");
+      data.forEach(t => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <b>${t.title}</b> — ${t.status}
+          <button onclick="markDone('${t._id}')">Done</button>
+          <button onclick="deleteTask('${t._id}')">Delete</button>
+        `;
+        list.appendChild(li);
+      });
+    });
+}
+
+function markDone(id) {
+  fetch(`http://localhost:3000/tasks/${id}/status`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status: "done" })
+  }).then(() => location.reload());
+}
+
+function deleteTask(id) {
+  fetch(`http://localhost:3000/tasks/${id}`, {
+    method: "DELETE"
+  }).then(() => location.reload());
+}
+</script>
+
+</body>
+</html>
+
+

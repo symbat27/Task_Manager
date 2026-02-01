@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Task</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <a href="index.html">Projects</a>
+  <a href="tasks.html">Tasks</a>
+  <a href="create-task.html">Create Task</a>
+  <a href="users.html">Users</a>
+</div>
+
+<h1>Create Task</h1>
+
+<div class="container">
+  <input id="title" placeholder="Title"><br>
+  <input id="description" placeholder="Description"><br>
+  <input id="projectId" placeholder="Project ID"><br>
+  <input id="assigneeId" placeholder="Assignee ID"><br><br>
+
+  <button onclick="createTask()">Create</button>
+</div>
+
+<script>
+function createTask() {
+  fetch("http://localhost:3000/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: document.getElementById("title").value,
+      description: document.getElementById("description").value,
+      projectId: document.getElementById("projectId").value,
+      assigneeId: document.getElementById("assigneeId").value,
+      status: "todo",
+      priority: "high",
+      comments: []
+    })
+  }).then(() => alert("Task created"));
+}
+</script>
+
+</body>
+</html>
+
+
